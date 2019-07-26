@@ -1,7 +1,8 @@
 <!-- MarkdownTOC -->
 
 - [axonbot](#axonbot)
-    - [Install](#install)
+    - [Install from pip or pipenv](#install-from-pip-or-pipenv)
+    - [Install from this repository](#install-from-this-repository)
     - [Setup Slack Bot and get a Slack API Token](#setup-slack-bot-and-get-a-slack-api-token)
     - [Get the Axonius API Key and Secret for a given user](#get-the-axonius-api-key-and-secret-for-a-given-user)
     - [Running AxonBot](#running-axonbot)
@@ -13,8 +14,19 @@
 
 # axonbot
 
-## Install
-To setup the virtual environment:
+## Install from pip or pipenv
+
+This package is not listed on pypi, so you can not install it this way.
+
+## Install from this repository
+
+Clone this repository:
+
+```
+git clone git@github.com:Axonius/axonbot.git
+```
+
+Then to setup the virtual environment:
 
 ```
 pipenv install
