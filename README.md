@@ -54,7 +54,21 @@ export AX_SECRET="SECRET"
 export SLACK_API_TOKEN="TOKEN"
 ```
 
-or edit local_settings.py and set the same variables
+You can also edit .env and set the same variables instead of setting them on the command line:
+
+```
+# URL of the Axonius instance
+AX_URL="https://axonius.server"
+
+# API key of a user in Axonius
+AX_KEY="KEY"
+
+# API secret of a user in Axonius
+AX_SECRET="SECRET"
+
+# Slack API Token for a Slack App installed in your workspace
+SLACK_API_TOKEN="TOKEN"
+```
 
 ### Start it up
 
