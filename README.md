@@ -1,6 +1,6 @@
 # axonbot
 
-## Setup
+## Install
 To setup the virtual environment:
 
 ```
@@ -13,7 +13,15 @@ or install the requirements to global site packages:
 pip install -r requirements.txt
 ```
 
-## Running
+## Setup Slack Bot and get a Slack API Token
+
+[Slack Bot Setup Instructions](setup_info/slack_setup.md)
+
+## Get the Axonius API Key and Secret for a given user
+
+[Axonius API Key Instructions](setup_info/axonius_setup.md)
+
+## Running AxonBot
 
 ### Required variables
 
