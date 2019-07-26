@@ -54,7 +54,7 @@ export AX_SECRET="SECRET"
 export SLACK_API_TOKEN="TOKEN"
 ```
 
-You can also edit .env and set the same variables instead of setting them on the command line:
+Or you can edit .env and set the same variables instead of setting them on the command line:
 
 ```
 # URL of the Axonius instance
