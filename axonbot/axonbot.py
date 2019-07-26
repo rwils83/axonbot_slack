@@ -274,7 +274,7 @@ class AxonBot(base.MachineBasePlugin):
 
         change_method = getattr(cache_entry["api_type"], label_sub_cmd["method_name"])
         changed = change_method(rows=cache_entry["rows"], labels=labels)
-        send_text = "{action} labels {labels!r} to {changed} {api_type}"
+        send_text = "{action} labels {labels!r} on {changed} {api_type}"
         send_text = send_text.format(
             action=label_sub_cmd["action"],
             labels=", ".join(labels),
@@ -376,7 +376,7 @@ class AxonBot(base.MachineBasePlugin):
             field = axonius_api_client.api.utils.find_field(name=field, adapter=adapter, fields=known_fields)
             return adapter, field
         except axonius_api_client.api.exceptions.UnknownAdapterName as exc:
-            known_names = "\n\t" + "\n\t".join(exc.known_names)
+            known_names = "\n\t" + "\n\t".join(["generic"] + exc.known_names)
             send_text = "No such adapter named {adapter!r}, valid adapter names: {known_names}"
             send_text = send_text.format(adapter=adapter, known_names=known_names)
             msg.reply(send_text, in_thread=True)

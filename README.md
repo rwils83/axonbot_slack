@@ -1,3 +1,16 @@
+<!-- MarkdownTOC -->
+
+- [axonbot](#axonbot)
+    - [Install](#install)
+    - [Setup Slack Bot and get a Slack API Token](#setup-slack-bot-and-get-a-slack-api-token)
+    - [Get the Axonius API Key and Secret for a given user](#get-the-axonius-api-key-and-secret-for-a-given-user)
+    - [Running AxonBot](#running-axonbot)
+        - [Required variables](#required-variables)
+        - [Start it up](#start-it-up)
+    - [Using AxonBot](#using-axonbot)
+
+<!-- /MarkdownTOC -->
+
 # axonbot
 
 ## Install
@@ -15,11 +28,11 @@ pip install -r requirements.txt
 
 ## Setup Slack Bot and get a Slack API Token
 
-[Slack Bot Setup Instructions](setup_info/slack_setup.md)
+[Slack Bot Setup Instructions](docs/slack_setup.md)
 
 ## Get the Axonius API Key and Secret for a given user
 
-[Axonius API Key Instructions](setup_info/axonius_setup.md)
+[Axonius API Key Instructions](docs/axonius_setup.md)
 
 ## Running AxonBot
 
@@ -56,3 +69,7 @@ Or if you installed the packages globally:
 ```
 python run.py
 ```
+
+## Using AxonBot
+
+[Using AxonBox](docs/axonbot_using.md)
