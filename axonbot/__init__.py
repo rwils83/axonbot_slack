@@ -2,6 +2,7 @@
 import datetime
 import json
 import logging
+import platform
 import sys
 
 import axonius_api_client
@@ -121,6 +122,21 @@ class AxonBot(base.MachineBasePlugin):
         m = "Axonius connected: {}!"
         m = m.format(self._auth_method)
         text.announce(m)
+        self._start = datetime.datetime.utcnow()
+
+    @decorators.respond_to(regex=r"^hello$")
+    def hello(self, msg):
+        """hello: Get a friendly message from skynet"""
+        uptime = datetime.datetime.utcnow() - self._start
+        send_text = [
+            "Python: *{}*".format(format(sys.version).split()[0]),
+            "Platform: *{}*".format(platform.platform()),
+            "Uptime: *{}*".format(format(uptime).split(".")[0]),
+            "<https://github.com/Axonius/axonbot|Bot Site> / "
+            "<https://axonius.com|Axonius Site>",
+        ]
+        send_text = "\n".join(send_text)
+        msg.reply(send_text)
 
     @decorators.respond_to(regex=r"^count device$")
     def count_device(self, msg):
@@ -270,7 +286,7 @@ class AxonBot(base.MachineBasePlugin):
 
     @decorators.process("message")
     def handle_thread(self, event):
-        """Handle all messages that are in threads and not from this bot."""
+        """thread commands: labels add|remove foo1,foo2,foo3."""
         if "thread_ts" not in event:
             return
         if event["user"] == self.retrieve_bot_info()["id"]:

@@ -13,8 +13,10 @@ import machine.settings
 import machine.core
 import machine.singletons
 
-# from axonbot.version import __version__
-__version__ = "1.0.2"
+this_script = pathlib.Path(sys.argv[0]).absolute().resolve()
+parent_path = this_script.parent.parent
+sys.path.insert(0, format(parent_path))
+from axonbot.version import __version__  # noqa
 
 # docs URL for connecting to Axonius
 AX_SETUP_URL = "https://github.com/Axonius/axonbot/blob/master/docs/axonius_setup.md"
@@ -22,7 +24,10 @@ AX_SETUP_URL = "https://github.com/Axonius/axonbot/blob/master/docs/axonius_setu
 # docs URL for connecting to Slack
 SLACK_SETUP_URL = "https://github.com/Axonius/axonbot/blob/master/docs/slack_setup.md"
 
-# Variables required for axonbot to run
+# docs URL for proxy variables
+PROXY_URL = "https://2.python-requests.org/en/master/user/advanced/#proxies"
+
+# Required variables for axonbot to run
 REQUIRED_VARIABLES = {
     "SLACK_API_TOKEN": {
         "desc": "API Token of bot user in Slack",
@@ -41,6 +46,75 @@ REQUIRED_VARIABLES = {
         "doc_url": AX_SETUP_URL,
     },
 }
+
+# Optional variables for axonbot to run
+OPTIONAL_VARIABLES = {
+    "HTTPS_PROXY": {
+        "desc": "Proxy to use when connecting to the Slack API",
+        "doc_url": PROXY_URL,
+    },
+    "AX_HTTPS_PROXY": {
+        "desc": "Proxy to use when connecting to the Axonius instance",
+        "doc_url": PROXY_URL,
+    },
+}
+
+
+def green(t, b=True):
+    """Pass."""
+    return click.style(t, fg="green", bold=b)
+
+
+def red(t, b=True):
+    """Pass."""
+    return click.style(t, fg="red", bold=b)
+
+
+def blue(t, b=True):
+    """Pass."""
+    return click.style(t, fg="blue", bold=b)
+
+
+def prompt_var(dotenv_path, var, desc, url, default=None):
+    """Pass."""
+    old_value = dotenv.main.DotEnv(dotenv_path=dotenv_path).get(var) or default
+    text_lines = [
+        "",
+        "{}: {}".format(green("Description"), blue(desc)),
+        "{}: {}".format(green("Docs URL"), blue(url)),
+        "{} '{}'".format(green("Provide"), red(var)),
+    ]
+    new_value = click.prompt(text="\n".join(text_lines), default=old_value)
+    if old_value == new_value:
+        change = "left unchanged"
+    else:
+        change = "updated"
+        dotenv.set_key(dotenv_path, var, new_value)
+    text = "'{var}' {change} in '{dotenv}'"
+    text = text.format(dotenv=blue(format(dotenv_path)), var=red(var), change=change)
+    click.echo(text)
+    return new_value
+
+
+def check_vars(dotenv_path, variables, default=None):
+    """Pass."""
+    for var, varinfo in variables.items():
+        if os.environ.get(var):
+            text = "{}: '{}'"
+            text = text.format(green("Found variable"), red(var))
+            click.echo(text)
+        elif default == "" and var in os.environ:
+            text = "{}: '{}'"
+            text = text.format(green("Found empty variable"), red(var))
+            click.echo(text)
+        else:
+            prompt_var(
+                dotenv_path=dotenv_path,
+                var=var,
+                desc=varinfo["desc"],
+                url=varinfo["doc_url"],
+                default=default,
+            )
 
 
 @click.group()
@@ -61,48 +135,16 @@ def cli(ctx, file):
     ctx.obj["FILE"] = file
 
 
-def green(t, b=True):
-    """Pass."""
-    return click.style(t, fg="green", bold=b)
-
-
-def red(t, b=True):
-    """Pass."""
-    return click.style(t, fg="red", bold=b)
-
-
-def blue(t, b=True):
-    """Pass."""
-    return click.style(t, fg="blue", bold=b)
-
-
-def prompt_var(dotenv_path, var, desc, doc_url):
-    """Pass."""
-    old_value = dotenv.main.DotEnv(dotenv_path=dotenv_path).get(var) or None
-    text_lines = [
-        "",
-        "{}: {}".format(green("Description"), blue(desc)),
-        "{}: {}".format(green("Docs URL"), blue(doc_url)),
-        "{} '{}'".format(green("Provide"), red(var)),
-    ]
-    new_value = click.prompt(text="\n".join(text_lines), default=old_value)
-    if old_value == new_value:
-        change = "left unchanged"
-    else:
-        change = "updated"
-        dotenv.set_key(dotenv_path, var, new_value)
-    text = "'{var}' {change} in '{dotenv}'"
-    text = text.format(dotenv=blue(format(dotenv_path)), var=red(var), change=change)
-    click.echo(text)
-
-
 @cli.command()
 @click.pass_context
 def config(ctx):
     """Used to configure axonbot."""
     dotenv_path = ctx.obj["FILE"]
     for var, varinfo in REQUIRED_VARIABLES.items():
-        prompt_var(dotenv_path, var, varinfo["desc"], varinfo["doc_url"])
+        prompt_var(dotenv_path, var, varinfo["desc"], varinfo["doc_url"], None)
+
+    for var, varinfo in OPTIONAL_VARIABLES.items():
+        prompt_var(dotenv_path, var, varinfo["desc"], varinfo["doc_url"], "")
 
 
 @cli.command()
@@ -112,13 +154,8 @@ def run(ctx):
     dotenv_path = ctx.obj["FILE"]
     dotenv.load_dotenv(dotenv_path)
 
-    for var, varinfo in REQUIRED_VARIABLES.items():
-        if os.environ.get(var):
-            text = "{}: '{}'"
-            text = text.format(green("Found variable"), red(var))
-            click.echo(text)
-        else:
-            prompt_var(dotenv_path, var, varinfo["desc"], varinfo["doc_url"])
+    check_vars(dotenv_path=dotenv_path, variables=REQUIRED_VARIABLES, default=None)
+    check_vars(dotenv_path=dotenv_path, variables=OPTIONAL_VARIABLES, default="")
 
     dotenv.load_dotenv(dotenv_path)
     SETTINGS = {}
@@ -214,9 +251,4 @@ def run(ctx):
 
 
 if __name__ == "__main__":
-    this_script = pathlib.Path(sys.argv[0]).absolute().resolve()
-    parent_path = this_script.parent.parent
-    sys.path.insert(0, format(parent_path))
-    from axonbot.version import __version__
-
     cli()

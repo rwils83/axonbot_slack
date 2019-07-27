@@ -49,11 +49,11 @@ Unfortunately, this architecture makes getting a Slack API Token a bit tedius. R
 
 ## Setup a Slack Bot and get a Slack API Token
 
-[Slack Bot Setup Instructions](docs/slack_setup.md)
+[Slack Bot Setup Instructions](https://github.com/Axonius/axonbot/blob/master/docs/slack_setup.md)
 
 ## Get the Axonius API Key and Secret for a given user
 
-[Axonius API Key and API Secret Instructions](docs/axonius_setup.md)
+[Axonius API Key and API Secret Instructions](https://github.com/Axonius/axonbot/blob/master/docs/axonius_setup.md)
 
 ## Running AxonBot
 
@@ -103,6 +103,20 @@ If you need to use a proxy to connect to the internet, you can set HTTPS_PROXY i
 
 If you need to use a proxy to connect to your Axonius instance, you can set AX_HTTPS_PROXY in your shell or in your .env file.
 
+```
+# simple proxy
+HTTPS_PROXY="http://10.10.1.10:3128"
+AX_HTTPS_PROXY="http://10.10.1.30:3128"
+
+# basic auth proxy
+HTTPS_PROXY="http://user:pass@10.10.1.10:3128/""
+AX_HTTPS_PROXY="http://user:pass@10.10.1.30:3128/""
+
+# socks proxy
+HTTPS_PROXY="socks5://user:pass@10.10.1.10:3128""
+AX_HTTPS_PROXY="socks5://user:pass@10.10.1.30:3128""
+```
+
 ### Start it up
 
 Inside of a pipenv:
@@ -119,4 +133,4 @@ python run.py
 
 ## Using AxonBot
 
-[Using AxonBox](docs/axonbot_using.md)
+[Using AxonBox](https://github.com/Axonius/axonbot/blob/master/docs/axonbot_using.md)
