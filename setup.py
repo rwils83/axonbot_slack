@@ -42,7 +42,7 @@ setup(
         "cachetools",
         "python-dotenv",
     ],
-    keywords=["Axonius", "Slack Bot"],
+    keywords=["axonius", "slack", "bot"],
     license=ABOUT["__license__"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -55,5 +55,5 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
-    entry_points={"console_scripts": ["axonbot=axonbot.axonbot_shell:main"]},
+    entry_points={"console_scripts": ["axonbot=axonbot.shell:main"]},
 )
