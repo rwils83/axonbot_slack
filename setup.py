@@ -8,20 +8,16 @@ import codecs
 from setuptools import setup
 from setuptools import find_packages
 
-
 HERE = os.path.abspath(os.path.dirname(__file__))
 VERSION_PATH = os.path.join(HERE, "axonbot", "version.py")
-
 
 ABOUT = {}
 with codecs.open(VERSION_PATH, "r", "utf-8") as fh:
     CONTENTS = "\n".join(a for a in fh.readlines() if not a.startswith("#"))
     exec(CONTENTS, ABOUT)
 
-
 with codecs.open("README.md", "r", "utf-8") as f:
     README = f.read()
-
 
 setup(
     name=ABOUT["__title__"],
@@ -41,6 +37,7 @@ setup(
         "slack-machine",
         "cachetools",
         "python-dotenv",
+        "click",
     ],
     keywords=["axonius", "slack", "bot"],
     license=ABOUT["__license__"],
