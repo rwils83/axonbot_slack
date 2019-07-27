@@ -120,6 +120,7 @@ def run(ctx):
         else:
             prompt_var(dotenv_path, var, varinfo["desc"], varinfo["doc_url"])
 
+    dotenv.load_dotenv(dotenv_path)
     SETTINGS = {}
 
     # required, Axonius API key
