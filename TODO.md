@@ -1,4 +1,3 @@
 * docker: supervisor
-* docker: alpine or ubuntu or python:3?
-* docker: how to handle environment variables?
-
+* env var prompter!
+* add more logging, enable file logging for docker
