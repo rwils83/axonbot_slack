@@ -1,4 +1,5 @@
-FROM python:3.7-alpine
+# FROM python:3.7-alpine
+FROM python:3.7-slim
 
 MAINTAINER Axonius "apiclient@axonius.com"
 
@@ -12,18 +13,16 @@ ENV TZ UTC
 
 COPY docker.env /home/axonbot/.env
 
-RUN set -ex \
-    && apk add --no-cache --virtual .build-deps \
-        python3 \
-        python3-dev \
-        openssl-dev \
-        libffi-dev \
-        musl-dev \
-        gcc \
-    && pip install --no-cache-dir --upgrade pip axonbot \
-    && apk del .build-deps \
-    && rm -rf /usr/src/python
-    # && pip install --no-cache-dir --upgrade -r \
+RUN set -ex && pip install --no-cache-dir --upgrade pip axonbot
+    # && apk del .build-deps \
+    # && rm -rf /usr/src/python
+    # && apk add --no-cache --virtual .build-deps \
+    #     python3 \
+    #     python3-dev \
+    #     openssl-dev \
+    #     libffi-dev \
+    #     musl-dev \
+    #     gcc \    # && pip install --no-cache-dir --upgrade -r \
     #     /home/axonbot/requirements.txt \
 
 # remove this!
