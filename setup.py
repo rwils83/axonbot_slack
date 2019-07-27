@@ -52,5 +52,5 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
-    entry_points={"console_scripts": ["axonbot=axonbot.shell:main"]},
+    entry_points={"console_scripts": ["axonbot=axonbot.cli:cli"]},
 )

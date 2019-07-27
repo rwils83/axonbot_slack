@@ -15,7 +15,7 @@ from machine.singletons import Slack
 import cachetools
 import requests
 
-from . import shell
+from . import cli
 from . import version
 
 
@@ -570,4 +570,4 @@ class AxonBot(base.MachineBasePlugin):
             self._upload_file_reply(msg=msg, filename=filename, content=json_rows)
 
 
-__all__ = ("shell", "AxonBot", "version")
+__all__ = ("cli", "AxonBot", "version")
