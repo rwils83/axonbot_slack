@@ -10,6 +10,7 @@ axonius-api-client = "*"
 slack-machine = "*"
 cachetools = "*"
 python-dotenv = "*"
+click = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
