@@ -99,7 +99,7 @@ docker_clean:
 	docker volume rm axonbot || true
 
 docker_prune:
-	docker system prune -a -f
+	docker system prune -a
 
 # Docker publish
 
