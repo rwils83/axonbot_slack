@@ -245,6 +245,13 @@ def config(ctx):
 
 @cli.command()
 @click.pass_context
+def test(ctx):
+    """Used to test axonbot variables."""
+    load_vars(ctx)
+
+
+@cli.command()
+@click.pass_context
 def run(ctx):
     """Used to run axonbot."""
     load_vars(ctx)
