@@ -73,7 +73,7 @@ clean_files:
 	find . -type f -name "*.pyc" | xargs rm -f
 
 docker_build:
-	docker build --build-arg BUILD_DATE=$(DATE) --build-arg BUILD_VERSION=$(VERSION) --build-arg BUILD_REF=$(GIT_SHA) -t axonius/axonbot:latest .
+	docker build --build-arg BUILD_DATE=$(DATE) --build-arg BUILD_VERSION=$(VERSION) --build-arg BUILD_REF=$(GIT_SHA) --tag axonius/axonbot:$(VERSION) --tag axonius/axonbot:latest .
 
 docker_dev:
 	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --volume axonbot:/axonbot axonius/axonbot bash
