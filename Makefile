@@ -1,5 +1,7 @@
 PACKAGE := "axonbot"
 VERSION := $(shell grep __version__ $(PACKAGE)/version.py | cut -d\" -f2)
+DATE := $(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
+GIT_SHA := $(shell git rev-parse --short HEAD)
 
 # FUTURE: write Makefile doc
 
@@ -71,27 +73,30 @@ clean_files:
 	find . -type f -name "*.pyc" | xargs rm -f
 
 docker_build:
-	docker build -t axonius/axonbot:latest .
+	docker build --build-arg BUILD_DATE=$(DATE) --build-arg BUILD_VERSION=$(VERSION) --build-arg BUILD_REF=$(GIT_SHA) -t axonius/axonbot:latest .
 
-docker_shell:
-	docker run --rm --name axonbot --interactive --tty -e SLACK_API_TOKEN -e AX_URL -e AX_KEY -e AX_SECRET -e HTTPS_PROXY -e AX_HTTPS_PROXY --volume axonbot_config:/home/axonbot/axonbot_config axonius/axonbot bash
+docker_dev:
+	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --volume axonbot:/axonbot axonius/axonbot bash
 
 docker_config:
-	docker run --rm --name axonbot --interactive --tty -e SLACK_API_TOKEN -e AX_URL -e AX_KEY -e AX_SECRET -e HTTPS_PROXY -e AX_HTTPS_PROXY --volume axonbot_config:/home/axonbot/axonbot_config axonius/axonbot axonbot config
+	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --volume axonbot:/axonbot axonius/axonbot axonbot config
 
-docker_run:
-	docker run --rm --name axonbot --interactive --tty -e SLACK_API_TOKEN -e AX_URL -e AX_KEY -e AX_SECRET -e HTTPS_PROXY -e AX_HTTPS_PROXY --volume axonbot_config:/home/axonbot/axonbot_config axonius/axonbot
+docker_test:
+	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --volume axonbot:/axonbot axonius/axonbot axonbot test
+
+docker_run_dev:
+	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --volume axonbot:/axonbot axonius/axonbot
 
 docker_run_prod:
-	docker run -d --name axonbot --restart always -e SLACK_API_TOKEN -e AX_URL -e AX_KEY -e AX_SECRET -e HTTPS_PROXY -e AX_HTTPS_PROXY --volume axonbot_config:/home/axonbot/axonbot_config axonius/axonbot
+	docker run --detach --name axonbot --restart always --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --volume axonbot:/axonbot axonius/axonbot
 
 docker_stop:
 	docker stop axonbot || true
 
 docker_clean:
 	$(MAKE) docker_stop
-	docker container rm axonbot || true
-	docker volume rm axonbot_config || true
+	docker container rm -f -v axonbot || true
+	docker volume rm axonbot || true
 
 docker_prune:
 	docker system prune -a -f
