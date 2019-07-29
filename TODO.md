@@ -1,1 +1,1 @@
-* docker: supervisor
+* Update readme.md with docker instructions

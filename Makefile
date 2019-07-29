@@ -46,14 +46,14 @@ git_tag:
 	@git push --tags
 	@echo "*** ADDED TAG: $(VERSION)"
 
-publish:
+pkg_publish:
 	$(MAKE) lint
-	$(MAKE) build
+	$(MAKE) pkg_build
 	$(MAKE) git_check
 	pipenv run twine upload dist/*
 
-build:
-	$(MAKE) build_clean
+pkg_build:
+	$(MAKE) pkg_clean
 	$(MAKE) pipenv_install_build
 
 	@echo "*** Building Source and Wheel (universal) distribution"
@@ -62,7 +62,7 @@ build:
 	@echo "*** Checking package with twine"
 	pipenv run twine check dist/*
 
-build_clean:
+pkg_clean:
 	rm -rf build dist *.egg-info
 
 clean_files:
@@ -73,14 +73,25 @@ clean_files:
 docker_build:
 	docker build -t axonius/axonbot:latest .
 
-docker_run_debug:
-	docker run --name axonbot -i -t axonius/axonbot
+docker_shell:
+	docker run --rm --name axonbot --interactive --tty -e SLACK_API_TOKEN -e AX_URL -e AX_KEY -e AX_SECRET -e HTTPS_PROXY -e AX_HTTPS_PROXY --volume axonbot_config:/home/axonbot/axonbot_config axonius/axonbot bash
+
+docker_config:
+	docker run --rm --name axonbot --interactive --tty -e SLACK_API_TOKEN -e AX_URL -e AX_KEY -e AX_SECRET -e HTTPS_PROXY -e AX_HTTPS_PROXY --volume axonbot_config:/home/axonbot/axonbot_config axonius/axonbot axonbot config
 
 docker_run:
-	docker run --name axonbot -i -t -d axonius/axonbot
+	docker run --rm --name axonbot --interactive --tty -e SLACK_API_TOKEN -e AX_URL -e AX_KEY -e AX_SECRET -e HTTPS_PROXY -e AX_HTTPS_PROXY --volume axonbot_config:/home/axonbot/axonbot_config axonius/axonbot
+
+docker_run_prod:
+	docker run -d --name axonbot --restart always -e SLACK_API_TOKEN -e AX_URL -e AX_KEY -e AX_SECRET -e HTTPS_PROXY -e AX_HTTPS_PROXY --volume axonbot_config:/home/axonbot/axonbot_config axonius/axonbot
 
 docker_stop:
-	docker stop axonbot
+	docker stop axonbot || true
+
+docker_clean:
+	$(MAKE) docker_stop
+	docker container rm axonbot || true
+	docker volume rm axonbot_config || true
 
 docker_prune:
 	docker system prune -a -f
@@ -89,5 +100,6 @@ docker_prune:
 
 clean:
 	$(MAKE) clean_files
-	$(MAKE) build_clean
+	$(MAKE) pkg_clean
 	$(MAKE) pipenv_clean
+	$(MAKE) docker_clean || true
