@@ -12,6 +12,7 @@ import machine
 import machine.settings
 import machine.core
 import machine.singletons
+import slackclient
 
 SCRIPT_PATH_FULL = pathlib.Path(sys.argv[0]).absolute().resolve()
 SCRIPT_NAME = SCRIPT_PATH_FULL.name
@@ -22,10 +23,7 @@ DEFAULT_ENV = CWD_PATH / ".env"
 DEFAULT_ENV = os.environ.get("AX_DOTENV", DEFAULT_ENV) or DEFAULT_ENV
 sys.path.insert(0, format(PARENT_PATH))
 
-try:
-    from axonbot.version import __version__  # noqa
-except Exception:
-    __version__ = "?"
+import axonbot  # noqa
 
 
 def style_bold(txt, fg):
@@ -46,6 +44,9 @@ SLACK_SETUP_URL = "https://git.io/fjyAU"
 
 # docs URL for proxy variables
 PROXY_URL = "https://bit.ly/32TToJc"
+
+USER_FIELDS = "generic:labels,username,last_seen,mail"
+DEVICE_FIELDS = "generic:labels,hostname,network_interfaces,last_seen"
 
 VARINFOS = [
     {
@@ -89,6 +90,36 @@ VARINFOS = [
         "url": PROXY_URL,
         "req": False,
         "default_value": "",
+    },
+    {
+        "var": "AX_DEVICE_FIELDS",
+        "desc": "Default fields to return in device responses",
+        "url": "TODO",
+        "req": False,
+        "default_value": DEVICE_FIELDS,
+    },
+    {
+        "var": "AX_USER_FIELDS",
+        "desc": "Default fields to return in user responses",
+        "url": "TODO",
+        "req": False,
+        "default_value": USER_FIELDS,
+    },
+    {
+        "var": "LOGLEVEL",
+        "desc": "Logging level to use for all logging",
+        "url": "TODO",
+        "req": False,
+        "default_value": "info",
+        "check": "loglevel",
+    },
+    {
+        "var": "AX_LOGLEVEL",
+        "desc": "Logging level to use for Axonius API logging",
+        "url": "TODO",
+        "req": False,
+        "default_value": "info",
+        "check": "loglevel",
     },
 ]
 
@@ -174,35 +205,80 @@ def prompt_var(ctx, varinfo):
     return varinfo
 
 
-def load_vars(ctx):
+def get_loglvl(lvl, var):
+    """Pass."""
+    try:
+        lvl = getattr(logging, lvl.upper())
+    except Exception:
+        lvls = ["debug", "info", "warning", "error", "fatal"]
+        text = "Invalid logging level {lvl} in variable {var}, valid levels: {valid}"
+        text = text.format(lvl=lvl, var=var, valid=", ".join(lvls))
+        click.echo(style_bold(text, "red"))
+        sys.exit(1)
+    return lvl
+
+
+def patch_import_settings(settings):
+    """Replace import logic in machine."""
+    # I do not like the import logic behind local_settings.py - lets replace it
+    def import_settings(**kwargs):
+        """Monkey patcher for machine.settings.import_settings."""
+        return machine.settings.CaseInsensitiveDict(settings), True
+
+    machine.settings.import_settings = import_settings
+    machine.core.import_settings = import_settings
+    machine.singletons.import_settings = import_settings
+
+
+def check_var(varinfo, value):
+    """Pass."""
+    check = varinfo.get("check", "")
+    if check == "loglevel":
+        value = get_loglvl(lvl=value, var=varinfo["var"])
+    return value
+
+
+def load_settings(ctx):
     """Check that variables are set."""
     dotenv_check(ctx, create=False)
     dotenv.load_dotenv(ctx.obj["str"])
 
+    settings = {}
+
     fail = False
 
     for varinfo in VARINFOS:
-        varinfo["rerun"] = ""
         value = os.environ.get(varinfo["var"], "")
-        req = "required" if varinfo["req"] else "optional"
+
+        if varinfo["req"]:
+            req = "required variable"
+        else:
+            req = "optional variable"
+
         if value:
-            case = "Found {req} variable".format(req=req)
+            case = "Found {req}".format(req=req)
             case = style(case, "green")
             click.echo(LOAD_VAR_TMPL(case=case, **varinfo))
+            settings[varinfo["var"]] = check_var(varinfo=varinfo, value=value)
             continue
 
         if varinfo["var"] in os.environ:
-            case = "Found empty {req} variable"
+            case = "Found empty {req}"
         else:
-            case = "Unable to find {req} variable"
+            case = "Unable to find {req}"
 
         if varinfo["req"]:
-            case = style_bold(case.format(req=req), "red")
+            default = ""
+            case = style_bold(case.format(req=req, default=default), "red")
             fail = True
         else:
-            case = style_bold(case.format(req=req), "yellow")
+            default = " [will use default of {default_value!r}]".format(**varinfo)
+            case = style_bold(case.format(req=req, default=default), "yellow")
+            value = varinfo["default_value"]
+            settings[varinfo["var"]] = check_var(varinfo=varinfo, value=value)
 
-        click.echo(LOAD_VAR_TMPL(case=case, **varinfo))
+        text = LOAD_VAR_TMPL(case=case, **varinfo) + default
+        click.echo(text)
 
     if fail:
         rerun = "!!! Run '{name} config' to set missing/empty variables"
@@ -211,6 +287,17 @@ def load_vars(ctx):
         rerun += " in " + ctx.obj["at"]
         click.echo(rerun)
         sys.exit(1)
+
+    settings["STORAGE_BACKEND"] = "machine.storage.backends.memory.MemoryStorage"
+    settings["PLUGINS"] = [
+        "axonbot.main.AxonBot",
+        "machine.plugins.builtin.help.HelpPlugin",
+    ]
+    settings["DISABLE_HTTP"] = True
+    settings["KEEP_ALIVE"] = 15
+
+    patch_import_settings(settings)
+    return settings
 
 
 ENV_HELP = (
@@ -223,7 +310,7 @@ ENV_HELP = (
 @click.option(
     "--env", default=DEFAULT_ENV, type=click.Path(exists=False), help=ENV_HELP
 )
-@click.version_option(version=__version__)
+@click.version_option(version=axonbot.version.__version__)
 @click.pass_context
 def cli(ctx, env):
     """Used to set, get or unset values from a .env file."""
@@ -247,94 +334,59 @@ def config(ctx):
 @click.pass_context
 def test(ctx):
     """Used to test axonbot variables."""
-    load_vars(ctx)
+    settings = load_settings(ctx)
+    fail = False
+    try:
+        ax_client = axonbot.main.AxonConnection(settings=settings)
+        ax_client.start()
+    except axonbot.main.AxonError as exc:
+        text = "Unable to connect to Axonius: {msg}".format(msg=exc.msg)
+        click.echo(click.style(text, "red"))
+        fail = True
+    except Exception as exc:
+        text = "Unable to connect to Axonius: {msg}".format(msg=exc)
+        click.echo(click.style(text, "red"))
+        fail = True
+    else:
+        text = "Successfully connected to Axonius: {url}"
+        text = text.format(url=ax_client.http_client.url)
+        click.echo(click.style(text, "green"))
+
+    proxies = {}
+
+    if settings.get("HTTPS_PROXY", ""):
+        proxies["https"] = settings["HTTPS_PROXY"]
+
+    token = settings["SLACK_API_TOKEN"]
+
+    slack_client = slackclient.SlackClient(token=token, proxies=proxies)
+
+    try:
+        slack_client.server.rtm_connect()
+    except Exception as exc:
+        try:
+            reply = getattr(exc, "reply", "")
+            reply = exc.reply.json()
+        except Exception:
+            reply = getattr(exc, "reply", "")
+
+        text = "Unable to connect to Slack: {exc} {reply}"
+        text = text.format(exc=exc, reply=reply)
+        click.echo(click.style(text, "red"))
+        fail = True
+    else:
+        text = "Successfully connected to Slack"
+        click.echo(click.style(text, "green"))
+
+    if fail:
+        sys.exit(1)
 
 
 @cli.command()
 @click.pass_context
 def run(ctx):
     """Used to run axonbot."""
-    load_vars(ctx)
-
-    SETTINGS = {}
-
-    # required, Axonius API key
-    SETTINGS["AX_KEY"] = os.environ["AX_KEY"]
-
-    # required, Axonius API secret
-    SETTINGS["AX_SECRET"] = os.environ["AX_SECRET"]
-
-    # required, Axonius API url
-    SETTINGS["AX_URL"] = os.environ["AX_URL"]
-
-    # required, Slack API token
-    SETTINGS["SLACK_API_TOKEN"] = os.environ["SLACK_API_TOKEN"]
-
-    # optional, logging level for axonius_api_client
-    SETTINGS["AX_LOGLEVEL"] = getattr(
-        logging, os.environ.get("AX_LOGLEVEL", "info").upper()
-    )
-
-    # optional, logging level for slack-machine
-    SETTINGS["MACHINE_LOGLEVEL"] = getattr(
-        logging, os.environ.get("MACHINE_LOGLEVEL", "error").upper()
-    )
-
-    # optional, logging level for entire logging system
-    SETTINGS["LOGLEVEL"] = getattr(logging, os.environ.get("LOGLEVEL", "info").upper())
-
-    # optional, http proxy to use to connect to slack API
-    SETTINGS["HTTP_PROXY"] = os.environ.get("SLACK_HTTP_PROXY", "")
-
-    # optional, https proxy to use to connect to slack API
-    SETTINGS["HTTPS_PROXY"] = os.environ.get("SLACK_HTTPS_PROXY", "")
-
-    # optional, http proxy to use to connect to axonius API
-    SETTINGS["AX_HTTP_PROXY"] = os.environ.get("AX_HTTP_PROXY", "")
-
-    # optional, https proxy to use to connect to axonius API
-    SETTINGS["AX_HTTPS_PROXY"] = os.environ.get("AX_HTTPS_PROXY", "")
-
-    # optional, override axonbot.axonbot.AX_USER_FIELDS
-    SETTINGS["AX_USER_FIELDS"] = {
-        "generic": [
-            "labels",
-            "specific_data.data.username",
-            "specific_data.data.last_seen",
-            "specific_data.data.mail",
-        ]
-    }
-
-    # optional, override axonbot.axonbot.AX_DEVICE_FIELDS
-    SETTINGS["AX_DEVICE_FIELDS"] = {
-        "generic": [
-            "labels",
-            "specific_data.data.hostname",
-            "specific_data.data.network_interfaces",
-            "specific_data.data.last_seen",
-        ]
-    }
-
-    # do not change me, required settings for axonbot to work
-    SETTINGS["STORAGE_BACKEND"] = "machine.storage.backends.memory.MemoryStorage"
-    SETTINGS["PLUGINS"] = ["axonbot.AxonBot", "machine.plugins.builtin.help.HelpPlugin"]
-    SETTINGS["DISABLE_HTTP"] = True
-    SETTINGS["KEEP_ALIVE"] = 15
-
-    def import_settings(**kwargs):
-        """Monkey patcher for machine.settings.import_settings."""
-        return machine.settings.CaseInsensitiveDict(SETTINGS), True
-
-    # I do not like the import logic behind local_settings.py - lets replace it
-    machine.settings.import_settings = import_settings
-    machine.core.import_settings = import_settings
-    machine.singletons.import_settings = import_settings
-
-    # set the slack-machine logger levels to MACHINE_LOG
-    # this does not catch everything as slackclient is an abuser of
-    # logging.LEVEL which goes to the root logger - bad slackclient. bad!
-    logging.getLogger(machine.__name__).setLevel(SETTINGS["MACHINE_LOGLEVEL"])
-    logging.getLogger("apscheduler.scheduler").setLevel(SETTINGS["MACHINE_LOGLEVEL"])
+    load_settings(ctx)
 
     bot = machine.Machine()
 

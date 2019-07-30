@@ -76,19 +76,19 @@ docker_build:
 	docker build --build-arg BUILD_DATE=$(DATE) --build-arg BUILD_VERSION=$(VERSION) --build-arg BUILD_REF=$(GIT_SHA) --tag axonius/axonbot:$(VERSION) --tag axonius/axonbot:latest .
 
 docker_dev:
-	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --volume axonbot:/axonbot axonius/axonbot bash
+	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume axonbot:/axonbot axonius/axonbot bash
 
 docker_config:
-	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --volume axonbot:/axonbot axonius/axonbot axonbot config
+	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume axonbot:/axonbot axonius/axonbot axonbot config
 
 docker_test:
-	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --volume axonbot:/axonbot axonius/axonbot axonbot test
+	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume axonbot:/axonbot axonius/axonbot axonbot test
 
 docker_run_dev:
-	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --volume axonbot:/axonbot axonius/axonbot
+	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume axonbot:/axonbot axonius/axonbot
 
 docker_run_prod:
-	docker run --detach --name axonbot --restart always --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --volume axonbot:/axonbot axonius/axonbot
+	docker run --detach --name axonbot --restart always --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume axonbot:/axonbot axonius/axonbot
 
 docker_stop:
 	docker stop axonbot || true
