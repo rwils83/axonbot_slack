@@ -8,8 +8,9 @@ import codecs
 from setuptools import setup
 from setuptools import find_packages
 
+PROJECT = "axonbot_slack"
 HERE = os.path.abspath(os.path.dirname(__file__))
-VERSION_PATH = os.path.join(HERE, "axonbot", "version.py")
+VERSION_PATH = os.path.join(HERE, PROJECT, "version.py")
 
 ABOUT = {}
 with codecs.open(VERSION_PATH, "r", "utf-8") as fh:
@@ -52,5 +53,5 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
-    entry_points={"console_scripts": ["axonbot=axonbot.cli:cli"]},
+    entry_points={"console_scripts": ["{0}={0}.cli:cli".format(PROJECT)]},
 )

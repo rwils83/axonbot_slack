@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""AxonBot shell script entry point."""
+"""axonbot_slack shell script entry point."""
 import logging
 import os
 import sys
@@ -23,7 +23,7 @@ DEFAULT_ENV = CWD_PATH / ".env"
 DEFAULT_ENV = os.environ.get("AX_DOTENV", DEFAULT_ENV) or DEFAULT_ENV
 sys.path.insert(0, format(PARENT_PATH))
 
-import axonbot  # noqa
+import axonbot_slack  # noqa
 
 
 def style_bold(txt, fg):
@@ -290,7 +290,7 @@ def load_settings(ctx):
 
     settings["STORAGE_BACKEND"] = "machine.storage.backends.memory.MemoryStorage"
     settings["PLUGINS"] = [
-        "axonbot.main.AxonBot",
+        "axonbot_slack.main.AxonBotSlack",
         "machine.plugins.builtin.help.HelpPlugin",
     ]
     settings["DISABLE_HTTP"] = True
@@ -310,7 +310,7 @@ ENV_HELP = (
 @click.option(
     "--env", default=DEFAULT_ENV, type=click.Path(exists=False), help=ENV_HELP
 )
-@click.version_option(version=axonbot.version.__version__)
+@click.version_option(version=axonbot_slack.version.__version__)
 @click.pass_context
 def cli(ctx, env):
     """Used to set, get or unset values from a .env file."""
@@ -325,7 +325,7 @@ def cli(ctx, env):
 @cli.command()
 @click.pass_context
 def config(ctx):
-    """Used to configure axonbot."""
+    """Used to configure axonbot_slack."""
     for varinfo in VARINFOS:
         prompt_var(ctx, varinfo)
 
@@ -333,13 +333,13 @@ def config(ctx):
 @cli.command()
 @click.pass_context
 def test(ctx):
-    """Used to test axonbot variables."""
+    """Used to test axonbot_slack variables."""
     settings = load_settings(ctx)
     fail = False
     try:
-        ax_client = axonbot.main.AxonConnection(settings=settings)
+        ax_client = axonbot_slack.main.AxonConnection(settings=settings)
         ax_client.start()
-    except axonbot.main.AxonError as exc:
+    except axonbot_slack.main.AxonError as exc:
         text = "Unable to connect to Axonius: {msg}".format(msg=exc.msg)
         click.echo(click.style(text, "red"))
         fail = True
@@ -385,7 +385,7 @@ def test(ctx):
 @cli.command()
 @click.pass_context
 def run(ctx):
-    """Used to run axonbot."""
+    """Used to run axonbot_slack."""
     load_settings(ctx)
 
     bot = machine.Machine()

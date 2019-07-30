@@ -1,11 +1,7 @@
-PACKAGE := "axonbot"
+PACKAGE := "axonbot_slack"
 VERSION := $(shell grep __version__ $(PACKAGE)/version.py | cut -d\" -f2)
 DATE := $(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
 GIT_SHA := $(shell git rev-parse --short HEAD)
-
-# FUTURE: write Makefile doc
-
-.PHONY: build docs
 
 init:
 	$(MAKE) pip_install_tools
@@ -21,6 +17,9 @@ pipenv_install_lint:
 
 pipenv_install_build:
 	pipenv run pip install --quiet --upgrade --requirement requirements-build.txt
+
+pipenv_install_docs:
+	pipenv run pip install --quiet --upgrade --requirement docs/requirements.txt
 
 pipenv_clean:
 	pipenv --rm || true
@@ -72,31 +71,52 @@ clean_files:
 	find . -type f -name ".DS_Store" | xargs rm -f
 	find . -type f -name "*.pyc" | xargs rm -f
 
+docs_build:
+	$(MAKE) pipenv_install_docs
+	(cd docs && pipenv run make html SPHINXOPTS="-na" && cd ..)
+
+docs_open:
+	open docs/_build/html/index.html
+
+docs_coverage:
+	$(MAKE) pipenv_install_docs
+	(cd docs && pipenv run make coverage && cd ..)
+	cat docs/_build/coverage/python.txt
+
+docs_linkcheck:
+	$(MAKE) pipenv_install_docs
+	(cd docs && pipenv run make linkcheck && cd ..)
+	cat docs/_build/linkcheck/output.txt
+
+docs_clean:
+	$(MAKE) pipenv_install_docs
+	(cd docs && pipenv run make clean && cd ..)
+
 docker_build:
-	docker build --build-arg BUILD_DATE=$(DATE) --build-arg BUILD_VERSION=$(VERSION) --build-arg BUILD_REF=$(GIT_SHA) --tag axonius/axonbot:$(VERSION) --tag axonius/axonbot:latest .
+	docker build --build-arg BUILD_DATE=$(DATE) --build-arg BUILD_VERSION=$(VERSION) --build-arg BUILD_REF=$(GIT_SHA) --tag axonius/$(PACKAGE):$(VERSION) --tag axonius/$(PACKAGE):latest .
 
 docker_dev:
-	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume axonbot:/axonbot axonius/axonbot bash
+	docker run --rm --name $(PACKAGE) --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume $(PACKAGE):/$(PACKAGE) axonius/$(PACKAGE) bash
 
 docker_config:
-	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume axonbot:/axonbot axonius/axonbot axonbot config
+	docker run --rm --name $(PACKAGE) --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume $(PACKAGE):/$(PACKAGE) axonius/$(PACKAGE) $(PACKAGE) config
 
 docker_test:
-	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume axonbot:/axonbot axonius/axonbot axonbot test
+	docker run --rm --name $(PACKAGE) --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume $(PACKAGE):/$(PACKAGE) axonius/$(PACKAGE) $(PACKAGE) test
 
 docker_run_dev:
-	docker run --rm --name axonbot --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume axonbot:/axonbot axonius/axonbot
+	docker run --rm --name $(PACKAGE) --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume $(PACKAGE):/$(PACKAGE) axonius/$(PACKAGE)
 
 docker_run_prod:
-	docker run --detach --name axonbot --restart always --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume axonbot:/axonbot axonius/axonbot
+	docker run --detach --name $(PACKAGE) --restart always --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume $(PACKAGE):/$(PACKAGE) axonius/$(PACKAGE)
 
 docker_stop:
-	docker stop axonbot || true
+	docker stop $(PACKAGE) || true
 
 docker_clean:
 	$(MAKE) docker_stop
-	docker container rm -f -v axonbot || true
-	docker volume rm axonbot || true
+	docker container rm -f -v $(PACKAGE) || true
+	docker volume rm $(PACKAGE) || true
 
 docker_prune:
 	docker system prune -a
@@ -106,5 +126,6 @@ docker_prune:
 clean:
 	$(MAKE) clean_files
 	$(MAKE) pkg_clean
+	$(MAKE) docs_clean
 	$(MAKE) pipenv_clean
 	$(MAKE) docker_clean || true

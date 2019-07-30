@@ -5,19 +5,19 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-__version__ = "1.0.8"
+__version__ = "1.0.9"
 """:obj:`str`: Version of package."""
 
-__url__ = "https://github.com/Axonius/axonbot"
+__url__ = "https://github.com/Axonius/axonbot_slack"
 """:obj:`str`: URL of package."""
 
 __author__ = "Axonius"
 """:obj:`str`: Auth of package."""
 
-__title__ = "axonbot"
+__title__ = "axonbot_slack"
 """:obj:`str`: Title of package."""
 
-__project__ = "axonbot"
+__project__ = "axonbot_slack"
 """:obj:`str`: Name of package."""
 
 __author_email__ = "apiclient@axonius.com"

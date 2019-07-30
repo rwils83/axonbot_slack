@@ -252,7 +252,7 @@ class AxonConnection(object):
 
 
 @decorators.required_settings(["AX_URL", "AX_KEY", "AX_SECRET"])
-class AxonBot(base.MachineBasePlugin):
+class AxonBotSlack(base.MachineBasePlugin):
     """Axonius Slack Bot."""
 
     def init(self):
@@ -270,7 +270,7 @@ class AxonBot(base.MachineBasePlugin):
 
     @property
     def _bot_link(self):
-        return "<https://github.com/Axonius/axonbot|Bot Site>"
+        return "<https://github.com/Axonius/axonbot_slack|Bot Site>"
 
     @property
     def _vendor_link(self):

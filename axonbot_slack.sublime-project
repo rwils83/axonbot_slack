@@ -1,0 +1,53 @@
+{
+	"build_systems":
+	[
+	],
+	"folders":
+	[
+		{
+			"path": "/gh/axonius/axonbot_slack"
+		}
+	],
+	"settings":
+	{
+		"SublimeLinter.linters.flake8.args":
+		[
+			"--max-line-length=89"
+		],
+		"anaconda_linter_phantoms": false,
+		"anaconda_linter_show_errors_on_save": true,
+		"pep257": true,
+		"pep257_ignore":
+		[
+			"D203",
+			"D209",
+			"D212",
+			"D213",
+			"D400",
+			"D401",
+			"D403",
+			"D405",
+			"D406",
+			"D407",
+			"D408",
+			"D409",
+			"D410",
+			"D411"
+		],
+		"pep8_ignore":
+		[
+		],
+		"python_interpreter": "~/.pyenv/shims/python",
+		"rulers":
+		[
+			89
+		],
+		"sublack.black_command": "~/.pyenv/shims/black",
+		"sublack.black_line_length": null,
+		"sublack.black_on_save": true,
+		"sublack.black_skip_string_normalization": false,
+		"tab_size": 4,
+		"translate_tabs_to_spaces": true,
+		"trim_trailing_white_space_on_save": true
+	}
+}
