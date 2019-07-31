@@ -37,11 +37,8 @@ Table of Contents
 
    prereq.rst
    install.rst
-   variables_required.rst
-   variables_optional.rst
-   generate_slack_token.rst
-   get_axonius_tokens.rst
-   configure.rst
+   variables.rst
+   get_tokens.rst
    changelog.rst
    todo.rst
 

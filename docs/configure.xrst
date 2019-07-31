@@ -44,7 +44,6 @@ Since this package is not installed in the system wide packages, you'll need to 
 You can use the command line tool to prompt you for variables and save them to a :blue:`.env` file in your current working directory:
 
 
-
 Configure using pip
 =====================================================
 First you want to :ref:`Install using pip`.

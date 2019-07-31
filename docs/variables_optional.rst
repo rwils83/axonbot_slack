@@ -21,7 +21,7 @@ Proxies can be supplied in a few different ways (courtesy of `requests proxy sup
 
 * Simple Proxy: :blue:`"https://10.10.1.10:3128"`
 * Basic Auth Proxy: :blue:`"https://user:pass@10.10.1.10:3128"`
-* Socks Proxy: :blue:`socks5://user:pass@10.10.1.10:3128"`
+* Socks Proxy: :blue:`"socks5://user:pass@10.10.1.10:3128"`
 
 HTTPS_PROXY
 -----------------------------------------------------

@@ -1,11 +1,9 @@
 .. include:: .special.rst
 
-Installing
+Getting tokens
 #####################################################
 
 .. toctree::
 
-   install_docker.rst
-   install_pipenv.rst
-   install_pip.rst
-   install_github.rst
+   generate_slack_token.rst
+   get_axonius_tokens.rst
