@@ -5,7 +5,7 @@ Optional Variables
 
 AX_DOTENV
 =====================================================
-Have the bot use a specific :blue:`.env` file. You can also supply this using the ```--env``` argument to the bot.
+Have the bot use a specific :blue:`.env` file. You can also supply this using the ``--env`` argument to the bot.
 
 Default value: :blue:`"/current_working_directory/.env"`
 
@@ -37,35 +37,35 @@ Default value: :blue:`""`
 
 Object Fields
 ======================================================
-Fields can be considered the "columns" to return in response objects.
-
 You can always add or remove fields by sending commands to the bot, but this allows you to change the default set of fields that the bot starts with for user and device objects.
 
-These variables need to have either ``generic`` or an ``adapter name``, followed by a colon, then follow by a comma seperated list of valid generic or adapter specific fields, i.e.: ``generic:csv_of_fields``.
+These variables need to have an :green:`adapter` followed by a colon then followed by a comma seperated list of fields.
 
-If you want to supply more than one ``adapter:csv_of_fields``, you need to seperate them with a semi-colon, i.e.: ``adapter1:csv_of_fields;adapter2:csv_of_fields;adapter3:csv_of_fields;generic:csv_of_fields``.
+* Fields can be considered the "columns" to return in response objects.
+* The :blue:`generic` adapter relates to the correlated fields as displayed in the :blue:`General Data` tab of an object in the Axonius GUI.
+* Fields from multiple adapters can be defined by seperating them with a semi-colon.
 
-.. todo::
-   link to test/run modes!
+The :green:`adapter` must be either :blue:`generic` or the name of a valid adapter in the Axonius instance.
 
-An error will be happen during test and run modes if you:
+* If an invalid adapter name is supplied, the bot will print a list of valid adapter names and exit.
 
-* Supply an adapter that is not generic and does not exist in Axonius,
-* Supply an field that does not exist.
+Each field in the comma seperated list of fields must be a valid field for the adapter.
 
-Example for specifying just generic fields:
+* If an invalid field name is supplied, the bot will print a list of valid fields for the adapter and exit.
+
+Example for specifying a set of fields for just the generic adapter:
 
 .. code-block:: json
 
    "generic:labels,hostname,network_interfaces,last_seen"
 
-Example for supplying just one adapters specific fields:
+Example for specifying a set of fields for just one non-generic adapter :
 
 .. code-block:: json
 
    "aws:aws_device_type,aws_source"
 
-Example for supplying multiple adapters
+Example for specifying a set of fields for the generic adapter and for one non-generic adapter:
 
 .. code-block:: json
 

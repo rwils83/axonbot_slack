@@ -7,7 +7,7 @@
 Axonius Bot for Slack
 ##################################################################
 
-This is a `Slack bot <https://api.slack.com/bot-users>`_ for `Axonius <https://axonius.com>`_.
+This is a `Slack bot <https://api.slack.com/bot-users>`_ for `Axonius <https://www.axonius.com/>`_.
 
 It enables users in Slack to interact with an Axonius instance in a number of ways:
 
@@ -51,10 +51,10 @@ Indices and tables
 
 
 .. |MIT license| image:: https://img.shields.io/badge/License-MIT-blue.svg
-   :target: https://lbesson.mit-license.org/
+   :target: https://opensource.org/licenses/MIT
 
 .. |made-with-python| image:: https://img.shields.io/badge/Made%20with-Python-1f425f.svg
    :target: https://www.python.org/
 
 .. |code-black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
-   :target: https://github.com/python/black
+   :target: https://github.com/psf/black

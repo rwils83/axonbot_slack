@@ -139,7 +139,7 @@ html_theme_options = {
         # ("Examples", "examples"),
         # ("Link", "http://example.com", True),
         ("GitHub Repository", pkg.version.__url__, True),
-        ("Axonius", "https://axonius.com", True),
+        ("Axonius", "https://www.axonius.com/", True),
     ],
     # Render the next and previous page links in navbar. (Default: true)
     "navbar_sidebarrel": True,

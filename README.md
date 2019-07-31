@@ -1,12 +1,11 @@
-[![MIT
-license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
-[![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Documentation Status](https://readthedocs.org/projects/axonbot-slack/badge/?version=latest)](https://axonbot-slack.readthedocs.io/en/latest/?badge=latest)
 
 # Axonius Slack Bot
 
-This is a [Slack bot](https://api.slack.com/bot-users) for [Axonius](https://axonius.com). It enables users in Slack to interact with an Axonius instance in a number of ways:
+This is a [Slack bot](https://api.slack.com/bot-users) for [Axonius](https://www.axonius.com/). It enables users in Slack to interact with an Axonius instance in a number of ways:
 
 * Get a report of objects in JSON format sent to you in a new thread.
 * You can search for user objects by username, email (using regex or not).

@@ -274,7 +274,7 @@ class AxonBotSlack(base.MachineBasePlugin):
 
     @property
     def _vendor_link(self):
-        return "<https://axonius.com|Axonius Site>"
+        return "<https://www.axonius.com/|Axonius Site>"
 
     @property
     def _pyver(self):

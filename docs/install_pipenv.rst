@@ -6,9 +6,16 @@ Using pipenv
 
 Install package using pipenv
 =====================================================
-* Install pipenv
-* Use :blue:`pipenv install axonbot-shell` to create a virtual environment and install the package into it.
-* Use :blue:`pipenv run axonbot_shell` to verify the package is installed properly and the bot script is found in the virtual environments PATH.
+
+.. code-block:: console
+
+    $ pip install --upgrade pipenv
+    $ mkdir axonbot_slack
+    $ cd axonbot_slack
+    $ pipenv install axonbot-slack
+
+    $ # verify the package is installed correctly by running the bot script with no options
+    $ pipenv run axonbot_slack
 
 .. raw:: html
 
@@ -16,7 +23,11 @@ Install package using pipenv
 
 Configure bot in Pipenv
 =====================================================
-* Use :blue:`pipenv run axonbot_shell config` to create a :blue:`.env` file and populate it with prompted values.
+Use this to be prompted for all of the bots :ref:`Variables`.
+
+.. code-block:: console
+
+    $ pipenv run axonbot_slack config
 
 .. raw:: html
 
@@ -24,7 +35,11 @@ Configure bot in Pipenv
 
 Test bot in Pipenv
 =====================================================
-* Use :blue:`pipenv run axonbot_shell test` in order to validate the configuration values and the connection to Slack and Axonius.
+Use this to make sure the bot is configured correctly and can connect to Slack and Axonius.
+
+.. code-block:: console
+
+    $ pipenv run axonbot_slack test
 
 .. raw:: html
 
@@ -32,9 +47,13 @@ Test bot in Pipenv
 
 Run bot in Pipenv
 =====================================================
-* Use :blue:`pipenv run axonbot_shell run` in order to start the bot.
-* Send commands to the bot in Slack.
-* Use ``CTRL + C`` to stop the bot.
+Use this to run the bot.
+
+.. code-block:: console
+
+    $ pipenv run axonbot_slack run
+    $ # send commands to the bot in Slack
+    $ # Use CTRL + C to stop the bot
 
 .. raw:: html
 

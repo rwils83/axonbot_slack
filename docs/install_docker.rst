@@ -51,7 +51,7 @@ Download Docker image
 
 Configure bot in Docker
 =====================================================
-Use this to be prompted for all of the bots configuration variables.
+Use this to be prompted for all of the bots :ref:`Variables`.
 
 * Create a container named :blue:`axonbot_slack` from the image :blue:`axonious/axonbot_slack:latest`.
 * Create (or re-use an existing) volume named :blue:`axonbot_slack` and mount it inside the countainer at :blue:`/axoxnbot_slack`.
