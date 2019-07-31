@@ -1,3 +1,4 @@
-.. include:: /root/.special.rst
+.. include:: .special.rst
+
 Todo Items
 ###############################################

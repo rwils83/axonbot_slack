@@ -1,9 +1,10 @@
-.. include:: /root/.special.rst
+.. include:: .special.rst
+
 |MIT license|
 |made-with-python|
 |code-black|
 
-Axonius Slack Bot
+Axonius Bot for Slack
 ##################################################################
 
 This is a `Slack bot <https://api.slack.com/bot-users>`_ for `Axonius <https://axonius.com>`_.
@@ -21,11 +22,11 @@ To ask questions, request features, or report a bug:
 * File an issue on the `Issue Tracker <https://github.com/Axonius/axonbot_slack/issues>`_
 * Email apiclient@axonius.com
 
-This is publicly available on:
+This is publicly available in a few places:
 
 * `GitHub <https://github.com/Axonius/axonbot_slack>`_
 * `Docker <https://hub.docker.com/r/axonius/axonbot_slack>`_
-* `PyPi <https://pypi.org/project/axonbot_slack/>`_
+* `PyPi <https://pypi.org/project/axonbot-slack/>`_
 
 Table of Contents
 ###############################################
@@ -34,9 +35,15 @@ Table of Contents
    :maxdepth: 3
    :numbered:
 
-   root/install.rst
-   root/changelog.rst
-   root/todo.rst
+   prereq.rst
+   install.rst
+   variables_required.rst
+   variables_optional.rst
+   generate_slack_token.rst
+   get_axonius_tokens.rst
+   configure.rst
+   changelog.rst
+   todo.rst
 
 Indices and tables
 ###############################################

@@ -1,7 +1,8 @@
 # Axonius Slack Bot
 
 This is a [Slack bot](https://api.slack.com/bot-users) for [Axonius](https://axonius.com). It enables users in Slack to interact with an Axonius instance in a number of ways:
-* Get a JSON report of objects. 
+
+* Get a report of objects in JSON format sent to you in a new thread.
 * You can search for user objects by username, email (using regex or not).
 * You can search for device objects by hostname, IP address, or MAC address (using regex or not).
 * You can search for user or device objects by a query built in the Query Wizard of the Axonius GUI.
