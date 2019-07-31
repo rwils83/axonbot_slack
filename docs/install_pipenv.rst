@@ -5,17 +5,11 @@ Using pipenv
 
 Using `pipenv <https://github.com/pypa/pipenv>`_ allows you to install this into a virtual environment.
 
-Install pipenv
-=====================================================
-Install pipenv first:
-
-.. code-block:: console
-
-   $ pip install --upgrade pipenv
-
 Install package using pipenv
 =====================================================
-Use pipenv to create a virtual environment and install the package into it:
+* Install pipenv
+* Use pipenv to create a virtual environment and install the package into it
+* Use pipenv to run axonbot_shell to verify the package is installed properly
 
 .. raw:: html
 
