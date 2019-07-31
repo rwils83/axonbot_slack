@@ -3,9 +3,9 @@
 Configuring
 #####################################################
 
-:ref:`Required Variables` and :ref:`Optional Variables` can be set using the script itself, or you can set them before hand by:
+:ref:`Required Variables` and :ref:`Optional Variables` can be set using the bot config prompts, or you can set them before hand by:
 
-#. Setting the variables in a :blue:`.env` file in your current working directory, and these will be used every time you start :blue:`axonbot_slack`:
+#. Setting the variables in a :blue:`.env` file in your current working directory, and these will be used every time you start the bot:
 
    .. code-block:: console
 
@@ -15,7 +15,7 @@ Configuring
      $ echo 'AX_SECRET="axonius_user_api_secret"' >> .env
      $ echo 'SLACK_API_TOKEN="slack_bot_api_token"' >> .env
 
-#. Or setting the variables yourself, but these will only last for the current terminal session:
+#. Setting the variables yourself, but these will only last for the current terminal session:
 
    .. code-block:: console
 
