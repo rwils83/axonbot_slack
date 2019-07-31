@@ -41,10 +41,8 @@ Table of Contents
    :maxdepth: 3
    :numbered:
 
-   prereq.rst
    install.rst
-   variables.rst
-   get_tokens.rst
+   using.rst
    changelog.rst
    todo.rst
 

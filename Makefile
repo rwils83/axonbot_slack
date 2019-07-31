@@ -47,6 +47,9 @@ git_tag:
 	@git push --tags
 	@echo "*** ADDED TAG: $(VERSION)"
 
+cli_run:
+	pipenv run $(PACKAGE)/cli.py run
+
 pkg_publish:
 	$(MAKE) lint
 	$(MAKE) pkg_build
