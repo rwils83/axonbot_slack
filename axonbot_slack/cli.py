@@ -55,6 +55,7 @@ VARINFOS = [
         "url": SLACK_SETUP_URL,
         "req": True,
         "default_value": None,
+        "hidden": True,
     },
     {
         "var": "AX_URL",
@@ -69,6 +70,7 @@ VARINFOS = [
         "url": AX_SETUP_URL,
         "req": True,
         "default_value": None,
+        "hidden": True,
     },
     {
         "var": "AX_SECRET",
@@ -76,6 +78,7 @@ VARINFOS = [
         "url": AX_SETUP_URL,
         "req": True,
         "default_value": None,
+        "hidden": True,
     },
     {
         "var": "HTTPS_PROXY",
@@ -126,15 +129,15 @@ VARINFOS = [
 DOT_VAR_TMPL = """
 # {var}=""
 #   Required: {req}
-#   Default value: {default_value}
+#   Default value: {default_value!r}
 #   Description: {desc}
 #   Documentation URL: {url}
 """.format
 
 PROMPT_VAR_TMPL = """
     Variable: {var_color}
-    Current value: {current_value}
-    Default value: {default_value}
+    Current value: {current_value!r}
+    Default value: {default_value!r}
     Required: {req}
     Description: {desc_color}
     Documentation URL: {url_color}
@@ -149,6 +152,22 @@ for varinfo in VARINFOS:
     varinfo["desc_color"] = style_bold(varinfo["desc"], "green")
     varinfo["url_color"] = style_bold(varinfo["url"], "cyan")
     DOT_TMPL += DOT_VAR_TMPL(**varinfo)
+
+
+class HiddenValue(object):
+    """Pass."""
+
+    def __init__(self, value=""):
+        """Pass."""
+        self.value = value
+
+    def __str__(self):
+        """Pass."""
+        return "*" * len(self.value or "")
+
+    def __repr__(self):
+        """Pass."""
+        return "*" * len(self.value or "")
 
 
 def dotenv_check(ctx, create=True, mode=0o600):
@@ -175,32 +194,45 @@ def prompt_var(ctx, varinfo):
     dotenv_check(ctx)
     dotenv.load_dotenv(ctx.obj["str"])
 
-    varinfo["current_value"] = os.environ.get(varinfo["var"], "")
-    varinfo["prompt_default"] = varinfo["current_value"] or varinfo["default_value"]
-    varinfo["prompt_text"] = PROMPT_VAR_TMPL(**varinfo)
-    varinfo["new_value"] = click.prompt(
-        varinfo["prompt_text"], default=varinfo["prompt_default"]
+    hidden = varinfo.get("hidden", False)
+    current_value = os.environ.get(varinfo["var"], "")
+    default_value = current_value or varinfo["default_value"]
+
+    prompt_default = default_value
+    varinfo["current_value"] = current_value
+
+    if hidden:
+        if default_value:
+            prompt_default = HiddenValue(default_value)
+        if current_value:
+            varinfo["current_value"] = HiddenValue(current_value)
+
+    new_value = click.prompt(
+        PROMPT_VAR_TMPL(**varinfo), default=prompt_default, hide_input=hidden
     )
 
-    if varinfo["current_value"]:
-        if varinfo["current_value"] == varinfo["new_value"]:
-            varinfo["do_change"] = False
-            varinfo["result"] = "Current value equals new value, did not update"
-            varinfo["result_color"] = style(varinfo["result"], "green")
+    if isinstance(new_value, HiddenValue):
+        new_value = new_value.value
+
+    if current_value:
+        if current_value == new_value:
+            do_change = False
+            result = "Current value equals new value, did not update variable"
+            result = style(result, "green")
         else:
-            varinfo["do_change"] = True
-            varinfo["result"] = "Current value does not equal new value, updated"
-            varinfo["result_color"] = style(varinfo["result"], "yellow")
+            do_change = True
+            result = "Current value does not equal new value, updated variable"
+            result = style(result, "yellow")
     else:
-        varinfo["do_change"] = True
-        varinfo["result"] = "Current value is not set, added"
-        varinfo["result_color"] = style_bold(varinfo["result"], "yellow")
+        do_change = True
+        result = "Current value is not set, added variable"
+        result = style_bold(result, "yellow")
 
-    if varinfo["do_change"]:
-        dotenv.set_key(ctx.obj["str"], varinfo["var"], varinfo["new_value"])
+    if do_change:
+        dotenv.set_key(ctx.obj["str"], varinfo["var"], new_value)
 
-    text = "\n*** {result} variable '{var_color}' in {at}"
-    text = text.format(at=ctx.obj["at"], **varinfo)
+    text = "\n*** {result} '{var_color}' in {at}"
+    text = text.format(at=ctx.obj["at"], result=result, **varinfo)
     click.echo(text)
     return varinfo
 
@@ -313,7 +345,7 @@ ENV_HELP = (
 @click.version_option(version=axonbot_slack.version.__version__)
 @click.pass_context
 def cli(ctx, env):
-    """Used to set, get or unset values from a .env file."""
+    """Used to configure, test, or run the Slack bot for Axonius."""
     ctx.obj = {}
     ctx.obj["env"] = env
     ctx.obj["path"] = pathlib.Path(env).absolute().resolve()
