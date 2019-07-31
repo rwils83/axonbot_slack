@@ -29,6 +29,6 @@ ENV TZ="UTC" AX_DOTENV="/axonbot_slack/.env"
 
 RUN set -ex \
     && pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir axonbot_slack
+    && pip install --no-cache-dir axonbot_slack==$BUILD_VERSION
 
-CMD ["axonbot", "run"]
+CMD ["axonbot_slack", "run"]
