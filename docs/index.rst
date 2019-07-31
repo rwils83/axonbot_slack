@@ -28,6 +28,12 @@ This is publicly available in a few places:
 * `Docker <https://hub.docker.com/r/axonius/axonbot_slack>`_
 * `PyPi <https://pypi.org/project/axonbot-slack/>`_
 
+This bot was built with the help of a few packages:
+
+* `Click <https://click.palletsprojects.com/en/7.x/>`_: For building the command line interface.
+* `Axonius API Client <https://axonius-api-client.readthedocs.io/en/latest/>`_: For interacting with the Axonius API.
+* `Slack Machine <https://slack-machine.readthedocs.io/en/latest/>`_: For interacting with the Slack API.
+
 Table of Contents
 ###############################################
 

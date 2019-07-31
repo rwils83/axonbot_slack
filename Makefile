@@ -115,11 +115,19 @@ docker_stop:
 
 docker_clean:
 	$(MAKE) docker_stop
-	docker container rm -f -v $(PACKAGE) || true
+	docker container rm -f $(PACKAGE) || true
+
+docker_clean_volume:
 	docker volume rm $(PACKAGE) || true
+
+docker_pull:
+	docker pull axonius/$(PACKAGE):latest
 
 docker_prune:
 	docker system prune -a
+
+docker_logs:
+	docker logs --timestamps --tail 100 $(PACKAGE)
 
 docker_publish:
 	docker tag axonius/$(PACKAGE):$(VERSION) axonius/$(PACKAGE):latest

@@ -48,6 +48,11 @@ Download Docker image
 .. code-block:: console
 
     $ docker pull axonius/axonbot_slack:latest
+    $ docker image ls
+
+.. raw:: html
+
+    <script id="asciicast-CaiHHZU892s4iZYambs4ZsSly" src="https://asciinema.org/a/CaiHHZU892s4iZYambs4ZsSly.js" async></script>
 
 Configure bot in Docker
 =====================================================
@@ -69,6 +74,10 @@ Use this to be prompted for all of the bots :ref:`Variables`.
         axonius/axonbot_slack:latest \
         axonbot_slack config
 
+.. raw:: html
+
+    <script id="asciicast-260240" src="https://asciinema.org/a/260240.js" async></script>
+
 Test bot in Docker
 =====================================================
 Use this to make sure the bot is configured correctly and can connect to Slack and Axonius.
@@ -88,6 +97,10 @@ Use this to make sure the bot is configured correctly and can connect to Slack a
         --volume="axonbot_slack:/axonbot_slack" \
         axonius/axonbot_slack:latest \
         axonbot_slack test
+
+.. raw:: html
+
+    <script id="asciicast-260241" src="https://asciinema.org/a/260241.js" async></script>
 
 Run bot in Docker
 =====================================================
@@ -109,8 +122,14 @@ Use this to run the bot interactively so you can see that the bot starts up prop
         --volume="axonbot_slack:/axonbot_slack" \
         axonius/axonbot_slack:latest
 
+.. raw:: html
+
+    <script id="asciicast-260242" src="https://asciinema.org/a/260242.js" async></script>
+
 Run bot in production mode in Docker
 =====================================================
+Only do this after you have configured, tested, and run the bot interactively.
+
 Use this to run the bot detached and to always restart on failure.
 
 * Create a container named :blue:`axonbot_slack` from the image :blue:`axonious/axonbot_slack:latest`.
@@ -128,14 +147,36 @@ Use this to run the bot detached and to always restart on failure.
         --volume="axonbot_slack:/axonbot_slack" \
         axonius/axonbot_slack:latest
 
+To show all containers (running or not):
+
+.. code-block:: console
+
+    $ docker ps -a
+
+To show the last 100 lines of the detached dockers console.
+
+.. code-block:: console
+
+    $ docker logs --tail 100 axonbot_slack
+
 To stop a detached docker for this bot.
 
 .. code-block:: console
 
     $ docker stop axonbot_slack
 
-To start a previously stopped detached docker for this bot.
+To start a detached docker that was stopped for this bot.
 
 .. code-block:: console
 
     $ docker start axonbot_slack
+
+To remove a container for a stopped docker.
+
+.. code-block:: console
+
+    $ docker container rm axonbot_slack
+
+.. raw:: html
+
+    <script id="asciicast-260248" src="https://asciinema.org/a/260248.js" async></script>
