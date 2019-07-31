@@ -19,3 +19,8 @@ Documentation can be found [here](https://axonbot-slack.readthedocs.io/en/latest
 For questions, feature requests, or bug reports, you can:
 * File an issue on the [Issue Tracker](https://github.com/Axonius/axonbot_slack/issues)
 * Email apiclient@axonius.com
+
+This is publicly available in a few places:
+* [GitHub](https://github.com/Axonius/axonbot_slack)
+* [Docker](https://hub.docker.com/r/axonius/axonbot_slack)
+* [PyPi](https://pypi.org/project/axonbot-slack/)

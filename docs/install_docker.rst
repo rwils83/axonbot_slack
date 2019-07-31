@@ -42,7 +42,7 @@ Using Docker
             --env=AX_USER_FIELDS="x" \
             --env=AX_DEVICE_FIELDS="x"
 
-Pull Docker image
+Download Docker image
 =====================================================
 
 .. code-block:: console
@@ -51,6 +51,12 @@ Pull Docker image
 
 Configure bot in Docker
 =====================================================
+Use this to be prompted for all of the bots configuration variables.
+
+* Create a container named :blue:`axonbot_slack` from the image :blue:`axonious/axonbot_slack:latest`.
+* Create (or re-use an existing) volume named :blue:`axonbot_slack` and mount it inside the countainer at :blue:`/axoxnbot_slack`.
+* Run the container interactively with the command :blue:`axonbot_slack config`.
+* Remove the container (but not the volume) named :blue:`axoxnbot_slack` after the command finishes.
 
 .. code-block:: console
 
@@ -65,6 +71,12 @@ Configure bot in Docker
 
 Test bot in Docker
 =====================================================
+Use this to make sure the bot is configured correctly and can connect to Slack and Axonius.
+
+* Create a container named :blue:`axonbot_slack` from the image :blue:`axonious/axonbot_slack:latest`.
+* Create (or re-use an existing) volume named :blue:`axonbot_slack` and mount it inside the countainer at :blue:`/axoxnbot_slack`.
+* Run the container interactively with the command :blue:`axonbot_slack test`.
+* Remove the container (but not the volume) named :blue:`axoxnbot_slack` after the command finishes.
 
 .. code-block:: console
 
@@ -73,12 +85,18 @@ Test bot in Docker
         --interactive \
         --tty \
         --name="axonbot_slack" \
-        --volume=""axonbot_slack:/axonbot_slack"" \
+        --volume="axonbot_slack:/axonbot_slack" \
         axonius/axonbot_slack:latest \
         axonbot_slack test
 
 Run bot in Docker
 =====================================================
+Use this to run the bot interactively so you can see that the bot starts up properly.
+
+* Create a container named :blue:`axonbot_slack` from the image :blue:`axonious/axonbot_slack:latest`.
+* Create (or re-use an existing) volume named :blue:`axonbot_slack` and mount it inside the countainer at :blue:`/axoxnbot_slack`.
+* Run the container interactively with the default command :blue:`axonbot_slack run`.
+* Remove the container (but not the volume) named :blue:`axoxnbot_slack` after the command finishes.
 
 .. code-block:: console
 
@@ -93,6 +111,12 @@ Run bot in Docker
 
 Run bot in production mode in Docker
 =====================================================
+Use this to run the bot detached and to always restart on failure.
+
+* Create a container named :blue:`axonbot_slack` from the image :blue:`axonious/axonbot_slack:latest`.
+* Create (or re-use an existing) volume named :blue:`axonbot_slack` and mount it inside the countainer at :blue:`/axoxnbot_slack`.
+* Run the container detached with the default command :blue:`axonbot_slack run`.
+* This will *NOT* remove the container if it is stopped.
 
 .. code-block:: console
 
@@ -104,9 +128,14 @@ Run bot in production mode in Docker
         --volume="axonbot_slack:/axonbot_slack" \
         axonius/axonbot_slack:latest
 
-Stop bot in Docker
-=====================================================
+To stop a detached docker for this bot.
 
 .. code-block:: console
 
     $ docker stop axonbot_slack
+
+To start a previously stopped detached docker for this bot.
+
+.. code-block:: console
+
+    $ docker start axonbot_slack

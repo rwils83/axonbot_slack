@@ -25,6 +25,9 @@ Or you can skip all of that and scroll to the bottom of the page and click the :
 
 Optional Items
 =====================================================
+
+Customize Name
+-----------------------------------------------------
 You can change the name of the bot here.
 
 .. image:: _static/images/slack_customize_name.png
