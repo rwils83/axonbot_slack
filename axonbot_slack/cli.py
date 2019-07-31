@@ -411,7 +411,15 @@ def test(ctx):
         click.echo(click.style(text, "green"))
 
     if fail:
+        text = (
+            "Configuration test failed! Check configuration values and "
+            "connection to Slack/Axonius"
+        )
+        click.echo(click.style(text, "red"))
         sys.exit(1)
+
+    text = "Configuration test succeeded!"
+    click.echo(click.style(text, "green"))
 
 
 @cli.command()

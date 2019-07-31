@@ -9,7 +9,7 @@ Install package using pipenv
 =====================================================
 * Install pipenv
 * Use pipenv to create a virtual environment and install the package into it
-* Use pipenv to run axonbot_shell to verify the package is installed properly
+* Use pipenv to run :blue:`axonbot_shell` to verify the package is installed properly
 
 .. raw:: html
 
@@ -17,6 +17,11 @@ Install package using pipenv
 
 Configure bot in Pipenv
 =====================================================
+* Use pipenv to run :blue:`axonbot_shell config` to create a :blue:`.env` file and populate it with prompted values.
+
+.. raw:: html
+
+   <script id="asciicast-sBQ6nw98AU6XWtcec3N1bnFGc" src="https://asciinema.org/a/sBQ6nw98AU6XWtcec3N1bnFGc.js" async></script>
 
 Test bot in Pipenv
 =====================================================
