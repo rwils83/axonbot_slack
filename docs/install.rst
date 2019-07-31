@@ -7,5 +7,4 @@ Installing
 
    install_docker.rst
    install_pipenv.rst
-   install_pip.rst
-   install_github.rst
+
