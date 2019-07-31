@@ -6,10 +6,10 @@ You can either direct message the bot, or you can invite it to a channel by usin
 
 .. toctree::
 
-   using_help.rst
-   using_hello.rst
-   using_get_thread_examples.rst
-   using_thread_subcommands.rst
+   using_count.rst
    using_get.rst
    using_saved_query.rst
-
+   using_fields.rst
+   using_get_thread_examples.rst
+   using_thread_subcommands.rst
+   using_other.rst

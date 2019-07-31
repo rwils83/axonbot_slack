@@ -35,3 +35,8 @@
 .. role:: center
 .. role:: left
 .. role:: right
+
+
+.. |br| raw:: html
+
+    <br />

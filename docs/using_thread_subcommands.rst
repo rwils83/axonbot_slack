@@ -4,20 +4,20 @@ Thread sub-commands
 #####################################################
 Examples of thread sub-commands that can be used in the thread response for all get commands.
 
-Thread help
-====================================================
-Example of getting sub-commands that can be used in a thread where objects were returned.
+* :blue:`help`: Get the sub-commands that can be used in a thread where objects were returned.
 
-.. image:: _static/images/axonbot_thread_help.png
+  .. image:: _static/images/axonbot_thread_help.png
 
-Thread labels add
-====================================================
-Example of adding labels to objects that were returned.
+  |br|
 
-.. image:: _static/images/axonbot_thread_labels_add.png
+* :blue:`labels add VALUE1,VALUE2`: Add a comma-seperated list of labels to objects that were returned.
 
-Thread labels delete
-====================================================
-Example of removing labels from objects that were returned.
+   .. image:: _static/images/axonbot_thread_labels_add.png
 
-.. image:: _static/images/axonbot_thread_labels_delete.png
+  |br|
+
+* :blue:`labels delete VALUE1,VALUE2`: Remove a comma-seperated list of labels from objects that were returned.
+
+   .. image:: _static/images/axonbot_thread_labels_delete.png
+
+  |br|
