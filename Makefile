@@ -1,5 +1,5 @@
-PACKAGE := "axonbot_slack"
-VERSION := $(shell grep __version__ $(PACKAGE)/version.py | cut -d\" -f2)
+PACKAGE := axonbot_slack
+VERSION := $(shell grep "__version__" "$(PACKAGE)/version.py" | cut -d\" -f2)
 DATE := $(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
 GIT_SHA := $(shell git rev-parse --short HEAD)
 
@@ -93,22 +93,22 @@ docs_clean:
 	(cd docs && pipenv run make clean && cd ..)
 
 docker_build:
-	docker build --build-arg BUILD_DATE=$(DATE) --build-arg BUILD_VERSION=$(VERSION) --build-arg BUILD_REF=$(GIT_SHA) --tag axonius/$(PACKAGE):$(VERSION) --tag axonius/$(PACKAGE):latest .
+	docker build --build-arg BUILD_DATE=$(DATE) --build-arg BUILD_VERSION=$(VERSION) --build-arg BUILD_REF=$(GIT_SHA) --tag axonius/$(PACKAGE):$(VERSION) .
 
 docker_dev:
-	docker run --rm --name $(PACKAGE) --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume $(PACKAGE):/$(PACKAGE) axonius/$(PACKAGE) bash
+	docker run --rm --interactive --tty --name="$(PACKAGE)" --volume="$(PACKAGE):/$(PACKAGE)" axonius/$(PACKAGE):$(VERSION) bash
 
 docker_config:
-	docker run --rm --name $(PACKAGE) --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume $(PACKAGE):/$(PACKAGE) axonius/$(PACKAGE) $(PACKAGE) config
+	docker run --rm --interactive --tty --name="$(PACKAGE)" --volume="$(PACKAGE):/$(PACKAGE)" axonius/$(PACKAGE):$(VERSION) $(PACKAGE) config
 
 docker_test:
-	docker run --rm --name $(PACKAGE) --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume $(PACKAGE):/$(PACKAGE) axonius/$(PACKAGE) $(PACKAGE) test
+	docker run --rm --interactive --tty --name="$(PACKAGE)" --volume="$(PACKAGE):/$(PACKAGE)" axonius/$(PACKAGE):$(VERSION) $(PACKAGE) test
 
 docker_run_dev:
-	docker run --rm --name $(PACKAGE) --interactive --tty --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume $(PACKAGE):/$(PACKAGE) axonius/$(PACKAGE)
+	docker run --rm --interactive --tty --name="$(PACKAGE)" --volume="$(PACKAGE):/$(PACKAGE)" axonius/$(PACKAGE):$(VERSION)
 
 docker_run_prod:
-	docker run --detach --name $(PACKAGE) --restart always --env=SLACK_API_TOKEN --env=AX_URL --env=AX_KEY --env=AX_SECRET --env=HTTPS_PROXY --env=AX_HTTPS_PROXY --env=LOGLEVEL --env=AX_LOGLEVEL --env=AX_USER_FIELDS --env=AX_DEVICE_FIELDS --volume $(PACKAGE):/$(PACKAGE) axonius/$(PACKAGE)
+	docker run --detach --restart always --name="$(PACKAGE)" --volume="$(PACKAGE):/$(PACKAGE)" axonius/$(PACKAGE):$(VERSION)
 
 docker_stop:
 	docker stop $(PACKAGE) || true
@@ -121,7 +121,10 @@ docker_clean:
 docker_prune:
 	docker system prune -a
 
-# Docker publish
+docker_publish:
+	docker tag axonius/$(PACKAGE):$(VERSION) axonius/$(PACKAGE):latest
+	docker push axonius/$(PACKAGE):$(VERSION)
+	docker push axonius/$(PACKAGE):latest
 
 clean:
 	$(MAKE) clean_files
