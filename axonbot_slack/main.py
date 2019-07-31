@@ -169,7 +169,8 @@ class AxonConnection(object):
 
         self.users = axonius_api_client.api.Users(auth=self.auth_method)
         self.users._type = "users"
-        self.users._get_fields = self.parse_fields(
+        self.users._fields_example = FIELDS_USER_EXAMPLE
+        self.users.response_fields = self.parse_fields(
             api_type=self.users, fields=self.user_fields, example=FIELDS_USER_EXAMPLE
         )
 
@@ -211,6 +212,7 @@ class AxonConnection(object):
         except Exception as exc:
             msg = "Error fetching {api_type} fields: {exc}"
             msg = msg.format(api_type=api_type._type, exc=exc)
+            logger.exception(msg)
             raise AxonError(msg, exc)
 
         try:
@@ -229,6 +231,7 @@ class AxonConnection(object):
         except Exception as exc:
             msg = "Error finding {api_type} adapter named {adapter!r}: {exc}"
             msg = msg.format(api_type=api_type._type, adapter=adapter, exc=exc)
+            logger.exception(msg)
             raise AxonError(msg, exc)
 
         try:
@@ -246,6 +249,7 @@ class AxonConnection(object):
         except Exception as exc:
             msg = "Error finding field {field!r} for adapter {adapter!r}: {exc}"
             msg = msg.format(field=field, adapter=adapter, exc=exc)
+            logger.exception(msg)
             raise AxonError(msg, exc)
 
         return adapter, field
@@ -530,6 +534,7 @@ class AxonBotSlack(base.MachineBasePlugin):
         except Exception as exc:
             send_text = "Error fetching {api_type} using query {query!r}: {exc}"
             send_text = send_text.format(api_type=api_type._type, query=query, exc=exc)
+            logger.exception(send_text)
             msg.reply(send_text, in_thread=True)
         else:
             TTL_CACHE[msg.thread_ts] = {"api_type": api_type, "rows": rows}
@@ -567,6 +572,7 @@ class AxonBotSlack(base.MachineBasePlugin):
             send_text = send_text.format(
                 api_type=api_type._type, value=value, value_name=value_name, exc=exc
             )
+            logger.exception(send_text)
             msg.reply(send_text, in_thread=True)
         else:
             TTL_CACHE[msg.thread_ts] = {"api_type": api_type, "rows": rows}
@@ -650,6 +656,7 @@ class AxonBotSlack(base.MachineBasePlugin):
         except Exception as exc:
             send_text = "Error finding field {field!r} for adapter {adapter!r}: {exc}"
             send_text = send_text.format(field=field, adapter=adapter, exc=exc)
+            logger.exception(send_text)
             msg.reply(send_text, in_thread=True)
         return None, None
 
