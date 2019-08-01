@@ -1,6 +1,6 @@
 .. include:: .special.rst
 
-Using Docker
+Install using Docker
 #####################################################
 * You will need to `install Docker for your platform <https://docs.docker.com/install/>`_
 * This is the recommended method of deploying this bot:

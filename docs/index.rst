@@ -17,6 +17,8 @@ It enables users in Slack to interact with an Axonius instance in a number of wa
 * You can search for user or device objects by a query built in the Query Wizard of the Axonius GUI.
 * You can add or remove labels in the thread that is started up for returned objects.
 
+See :ref:`Quickstart Guide` in order to... get started quickly.
+
 To ask questions, request features, or report a bug:
 
 * File an issue on the `Issue Tracker <https://github.com/Axonius/axonbot_slack/issues>`_
@@ -28,7 +30,7 @@ This is publicly available in a few places:
 * `Docker <https://hub.docker.com/r/axonius/axonbot_slack>`_
 * `PyPi <https://pypi.org/project/axonbot-slack/>`_
 
-This bot was built with the help of a few packages:
+This was built with the help of a few packages:
 
 * `Click <https://click.palletsprojects.com/en/7.x/>`_: For building the command line interface.
 * `Axonius API Client <https://axonius-api-client.readthedocs.io/en/latest/>`_: For interacting with the Axonius API.
@@ -41,6 +43,7 @@ Table of Contents
    :maxdepth: 3
    :numbered:
 
+   quickstart.rst
    install.rst
    using.rst
    changelog.rst

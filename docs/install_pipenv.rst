@@ -1,6 +1,6 @@
 .. include:: .special.rst
 
-Using pipenv
+Instal using pipenv
 #####################################################
 * Using `pipenv <https://github.com/pypa/pipenv>`_ allows you to install this into a virtual environment.
 
