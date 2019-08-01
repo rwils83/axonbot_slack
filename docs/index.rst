@@ -17,7 +17,10 @@ It enables users in Slack to interact with an Axonius instance in a number of wa
 * You can search for user or device objects by a query built in the Query Wizard of the Axonius GUI.
 * You can add or remove labels in the thread that is started up for returned objects.
 
-See :ref:`Quickstart Guide` in order to... get started quickly.
+You can:
+
+* See the :ref:`Quickstart Guide` in order to... get started quickly.
+* See :ref:`Using the Axonius Bot in Slack` for examples of interacting with the bot in Slack.
 
 To ask questions, request features, or report a bug:
 
