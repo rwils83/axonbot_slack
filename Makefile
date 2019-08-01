@@ -28,9 +28,8 @@ pipenv_init:
 	pipenv install --dev --skip-lock
 
 pyenv_init:
-	# FUTURE: THROW ERROR IF NO PYENV AND SHOW LINK TO PYENV INSTALL INSTRUCTIONS
-	pyenv install 3.7.3 -s
-	pyenv local 3.7.3
+	pyenv install 3.7.3 -s || true
+	pyenv local 3.7.3 || true
 
 lint:
 	$(MAKE) pipenv_install_lint
