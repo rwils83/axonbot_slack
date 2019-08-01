@@ -26,6 +26,9 @@ __author_email__ = "apiclient@axonius.com"
 __description__ = "Axonius Slack Bot"
 """:obj:`str`: Description of package."""
 
+__docs__ = "https://axonbot-slack.readthedocs.io/en/latest/"
+""":obj:`str`: Link to the documentation for this package."""
+
 __license__ = "MIT"
 """:obj:`str`: License of package."""
 
