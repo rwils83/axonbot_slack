@@ -36,14 +36,11 @@ def style(txt, fg):
     return click.style(txt, fg=fg, bold=False)
 
 
-# docs URL for connecting to Axonius
-AX_SETUP_URL = "https://git.io/fjyAT"
-
-# docs URL for connecting to Slack
-SLACK_SETUP_URL = "https://git.io/fjyAU"
-
-# docs URL for proxy variables
-PROXY_URL = "https://bit.ly/32TToJc"
+AX_SETUP_URL = "https://bit.ly/2YDkjJX"
+SLACK_SETUP_URL = "https://bit.ly/2LUE2ie"
+PROXY_URL = "https://bit.ly/315XZGp"
+FIELDS_URL = "https://bit.ly/31dUnlX"
+LOG_URL = "https://bit.ly/2Zpttqu"
 
 USER_FIELDS = "generic:labels,username,last_seen,mail"
 DEVICE_FIELDS = "generic:labels,hostname,network_interfaces,last_seen"
@@ -97,21 +94,21 @@ VARINFOS = [
     {
         "var": "AX_DEVICE_FIELDS",
         "desc": "Default fields to return in device responses",
-        "url": "TODO",
+        "url": FIELDS_URL,
         "req": False,
         "default_value": DEVICE_FIELDS,
     },
     {
         "var": "AX_USER_FIELDS",
         "desc": "Default fields to return in user responses",
-        "url": "TODO",
+        "url": FIELDS_URL,
         "req": False,
         "default_value": USER_FIELDS,
     },
     {
         "var": "LOGLEVEL",
         "desc": "Logging level to use for all logging",
-        "url": "TODO",
+        "url": LOG_URL,
         "req": False,
         "default_value": "info",
         "check": "loglevel",
@@ -119,7 +116,7 @@ VARINFOS = [
     {
         "var": "AX_LOGLEVEL",
         "desc": "Logging level to use for Axonius API logging",
-        "url": "TODO",
+        "url": LOG_URL,
         "req": False,
         "default_value": "info",
         "check": "loglevel",
