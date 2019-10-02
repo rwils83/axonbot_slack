@@ -34,7 +34,7 @@ setup(
     include_package_data=True,
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
     install_requires=[
-        "axonius-api-client",
+        "axonius-api-client==1.0.3",
         "slack-machine",
         "cachetools",
         "python-dotenv",
