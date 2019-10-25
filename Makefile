@@ -28,8 +28,8 @@ pipenv_init:
 	pipenv install --dev --skip-lock
 
 pyenv_init:
-	pyenv install 3.7.3 -s || true
-	pyenv local 3.7.3 || true
+	pyenv install 3.7.4 -s || true
+	pyenv local 3.7.4 || true
 
 lint:
 	$(MAKE) pipenv_install_lint
