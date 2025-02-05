@@ -1,3 +1,4 @@
 black; python_version > '3.6'
 flake8
 bandit
+setuptools>=70.0.0 # not directly required, pinned by Snyk to avoid a vulnerability
