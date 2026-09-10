@@ -3,3 +3,5 @@ slack-machine
 cachetools
 python-dotenv
 click
+certifi>=2023.7.22 # not directly required, pinned by Snyk to avoid a vulnerability
+requests>=2.31.0 # not directly required, pinned by Snyk to avoid a vulnerability
